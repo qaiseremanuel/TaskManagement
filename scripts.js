@@ -1,4 +1,3 @@
-
     let tasks = [];
     let editingIndex = -1;
     let targetDate = null;
@@ -30,7 +29,7 @@
         }
 
         if (!taskName || !assignee || isNaN(daysRelative)) {
-            alert("Please fill in all task fields.");
+            alert("Please enter task name, relative days, and ensure the meeting date is set.");
             return;
         }
 
@@ -55,7 +54,7 @@
                 status: tasks[editingIndex].status
             };
 
-            document.getElementById('addTaskButton').textContent = "Add Task";
+            document.getElementById('addTaskButton').textContent = "+ Add Another Task";
             editingIndex = -1;
         }
 
