@@ -11,14 +11,19 @@ body {
             font-family: Arial, sans-serif;
             text-align: center;
         }
-
-/* Styling the table */
+/* Title styling */
+h1 {
+    font-size: 36px; /* Increase the title font size */
+    text-align: center; /* Center-align the title */
+    color:#18691b; /* Optional: Change title color */
+}
+        /* Styling the table */
 table {
     margin: 0 auto; /* Center the table horizoally */
    width: 90%;
     border-collapse: collapse;
     margin-bottom: 20px;
-}
+   }
 
  th, td {
             border: 1px solid #ccc;
@@ -29,11 +34,7 @@ table {
             background-color: #18691b;
             color: white;
         }
-       
-	input[type="text"], input[type="date"], input[type="number"], select {
-            margin: 5px;
-        }
-
+ 
         button {
             margin: 5px;
         }
@@ -45,15 +46,26 @@ table {
         tr td {
             padding: 10px;
         }
-
+        .task-form {
+            width: 70%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+        }
+       
+        .task-form input, .task-form button {
+            padding: 10px;
+            margin: 5px;
+        }
 	.dashboard {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
+            color: white;
         }
         .dashboard-item {
-            background-color: #a09fa5;
+            background-color: hsl(240, 1%, 41%);
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
@@ -67,11 +79,11 @@ table {
             font-size: 16px;
         }
       
-       .task-not-yet-due {
-        color: black;
+        .task-not-yet-due {
+        color: hsl(44, 98%, 48%);
     }
-    .task-in-progress {
-        color: rgb(6, 19, 122);
+      .task-in-progress {
+        color: rgb(8, 8, 225);
     }
     .task-completed {
         color: rgb(9, 79, 9);
@@ -81,4 +93,10 @@ table {
         color: red;
     }
 
+    
+/* Change font color to white for all task counters */
+.task-item {
+    color: white; /* Set task font color to white */
+    background-color: #333; /* Optional: dark background to make white text stand out */
+}
 </style>
