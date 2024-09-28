@@ -13,10 +13,9 @@
 <h1>MCB Bank Limited</h1>
 <h2>Task Management & Tracking System</h2>
 
-<!-- Meeting Date and Event Name -->
+<!-- Meeting Forum Name -->
 <label for="eventName">Meeting:</label>
 <input type="text" id="eventName" placeholder="Enter event name, e.g., Board Meeting">
-
 <br>
 
 <!-- Dashboard View -->
@@ -42,10 +41,10 @@
         <h3>In Progress</h3>
         <p id="inProgressTasks">0</p>
     </div>
-
 </div>
-
 <br>
+
+<!-- Set Meeting Date -->
 <label for="targetDate">Meeting Date:</label>
 <input type="date" id="targetDate">
 <button onclick="setMeetingDate()">Set Meeting Date</button>
@@ -58,7 +57,7 @@
     
     <label for="daysBeforeAfter">Days Relative to Meeting Date:</label>
     <input type="number" id="daysBeforeAfter" placeholder="e.g., -15 or +2">
-
+ 
     <label for="assignee">Assignee:</label>
     <select id="assignee">
         <option value="" disabled selected>Select Assignee</option>
@@ -69,8 +68,8 @@
         <option value="Haroon">Haroon</option>
         <option value="Usman">Usman</option>
     </select>
-    
-    <button id="addTaskButton" onclick="addTask()">Add Task</button>
+    <button id="addTaskButton" onclick="addTask()">+Add Task</button>
+
 </div>
 
 <br> 
@@ -82,9 +81,7 @@
 <button onclick="filterTasksByToday()">Show Tasks Due Today</button>
 <button onclick="removeFilter()">Remove Filter</button>
 <br>
-
-    <!-- HTML table and other elements go here -->
-
+<!-- HTML table and other elements go here -->
 <!-- Task List Table -->
 <table class="task-list" id="taskList">
     <thead>
@@ -100,16 +97,14 @@
     </thead>
     <tbody id="taskBody"></tbody>
 </table>
-
+    
 <!-- Reset and Import and Export Buttons -->
 <button onclick="resetTasks()">Reset</button>
 <button onclick="exportToCSV()">Export to Excel</button>
 <button onclick="exportToXML()">Export to XML</button>
 <input type="file" accept=".xml" onchange="uploadFromXML(event)">
-
+   
     <!-- Link to external JavaScript -->
     <script src="scripts.js"></script>
-
 </body>
-
 </html>
