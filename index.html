@@ -14,9 +14,10 @@
 <h2>Task Management & Tracking System</h2>
 
 <!-- Meeting Forum Name -->
-<label for="eventName">Meeting:</label>
+ <h3>
+<label for="eventName">Forum:</label>
 <input type="text" id="eventName" placeholder="Enter event name, e.g., Board Meeting">
-<br>
+</h3>
 
 <!-- Dashboard View -->
 <div class="dashboard" id="dashboard">
@@ -45,22 +46,19 @@
 <br>
 
 <!-- Set Meeting Date -->
+
 <label for="targetDate">Meeting Date:</label>
 <input type="date" id="targetDate">
 <button onclick="setMeetingDate()">Set Meeting Date</button>
-<br><br>
 
 <!-- Task Input Fields -->
-<div>
-    <label for="taskName">Task:</label>
-    <input type="text" id="taskName" placeholder="Enter task name" style="width: 200px;">
-    
-    <label for="daysBeforeAfter">Days Relative to Meeting Date:</label>
-    <input type="number" id="daysBeforeAfter" placeholder="e.g., -15 or +2">
+
+<div class="task-form">
+    <input type="text" id="taskName" placeholder="Please enter the task name" style="width: 300px;">
+    <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting Date e.g., -15 or +2">
  
-    <label for="assignee">Assignee:</label>
     <select id="assignee">
-        <option value="" disabled selected>Select Assignee</option>
+        <option value="" disabled selected>Select Task Assignee</option>
         <option value="Secretary">Secretary</option>
         <option value="Imran">Imran</option>
         <option value="Khalil">Khalil</option>
@@ -68,11 +66,9 @@
         <option value="Haroon">Haroon</option>
         <option value="Usman">Usman</option>
     </select>
-    <button id="addTaskButton" onclick="addTask()">+Add Task</button>
-
+    <button id="addTaskButton" onclick="addTask()">+ Add New Task</button>
 </div>
 
-<br> 
 <!-- Search Box -->
 <label for="searchBox">Search Tasks:</label>
 <input type="text" id="searchBox" placeholder="Search by task name, assignee, or status" onkeyup="filterTasks()">
@@ -97,14 +93,16 @@
     </thead>
     <tbody id="taskBody"></tbody>
 </table>
-    
+
 <!-- Reset and Import and Export Buttons -->
 <button onclick="resetTasks()">Reset</button>
 <button onclick="exportToCSV()">Export to Excel</button>
 <button onclick="exportToXML()">Export to XML</button>
 <input type="file" accept=".xml" onchange="uploadFromXML(event)">
-   
+
     <!-- Link to external JavaScript -->
     <script src="scripts.js"></script>
+
 </body>
+
 </html>
