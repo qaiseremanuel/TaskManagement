@@ -1,4 +1,4 @@
-<style>
+<styl>
         
 /* Basic CSS Reset */
 * {
@@ -26,9 +26,8 @@ table {
             text-align: center<!-- all headers>
         }
         th {
-            background-color: #4CAF50;
+            background-color: #18691b;
             color: white;
-
         }
        
 	input[type="text"], input[type="date"], input[type="number"], select {
@@ -54,7 +53,7 @@ table {
             margin-top: 20px;
         }
         .dashboard-item {
-            background-color: #D3D3D3;
+            background-color: #a09fa5;
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
@@ -72,10 +71,10 @@ table {
         color: black;
     }
     .task-in-progress {
-        color: orange;
+        color: rgb(6, 19, 122);
     }
     .task-completed {
-        color: green;
+        color: rgb(9, 79, 9);
         text-decoration: line-through;
     }
     .task-overdue {
