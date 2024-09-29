@@ -11,13 +11,16 @@
 <body>
 
 <h1>MCB Bank Limited</h1>
-<h2>Task Management & Tracking System</h2>
+    <h2>Task Management & Tracking System</h2>
+    
+    <!-- Current Date and Time Display -->
+    <div id="dateTimeDisplay">Loading current date and time...</div>
 
-<!-- Meeting Forum Name -->
- <h3>
-<label for="eventName">Forum:</label>
-<input type="text" id="eventName" placeholder="Enter event name, e.g., Board Meeting">
-</h3>
+        <!-- Meeting Forum Name -->
+        <h3>
+            <label for="eventName">Forum:</label>
+            <input type="text" id="eventName" placeholder="Enter event name, e.g., Board Meeting">
+        </h3>
 
 <!-- Dashboard View -->
 <div class="dashboard" id="dashboard">
@@ -46,15 +49,13 @@
 <br>
 
 <!-- Set Meeting Date -->
-
 <label for="targetDate">Meeting Date:</label>
 <input type="date" id="targetDate">
 <button onclick="setMeetingDate()">Set Meeting Date</button>
 
 <!-- Task Input Fields -->
-
 <div class="task-form">
-    <input type="text" id="taskName" placeholder="Please enter the task name" style="width: 300px;">
+    <input type="text" id="taskName" placeholder="Please enter the task description" style="width: 400px;">
     <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting Date e.g., -15 or +2">
  
     <select id="assignee">
@@ -66,7 +67,7 @@
         <option value="Haroon">Haroon</option>
         <option value="Usman">Usman</option>
     </select>
-    <button id="addTaskButton" onclick="addTask()">+ Add New Task</button>
+    <button id="addTaskButton" onclick="addTask()">+Add New Task</button>
 </div>
 
 <!-- Search Box -->
@@ -102,7 +103,5 @@
 
     <!-- Link to external JavaScript -->
     <script src="scripts.js"></script>
-
 </body>
-
 </html>
