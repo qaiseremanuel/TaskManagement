@@ -19,7 +19,7 @@
         }
     }
 
-      function addTask() {
+    function addTask() {
         const taskName = document.getElementById('taskName').value.trim();
         const assignee = document.getElementById('assignee').value;
         const daysRelative = parseInt(document.getElementById('daysBeforeAfter').value);
@@ -125,7 +125,7 @@
     });
 }
 
-    function editTask(index) {
+function editTask(index) {
         const task = tasks[index];
         document.getElementById('taskName').value = task.name;
         document.getElementById('daysBeforeAfter').value = task.daysRelative;
@@ -133,21 +133,21 @@
         document.getElementById('addTaskButton').textContent = "Update Task";
         editingIndex = index;
 	updateDashboard();
-    }
+}
 
-    function deleteTask(index) {
+function deleteTask(index) {
         tasks.splice(index, 1);
         displayTasks();
 	updateDashboard();
-    }
+}
 
-    function updateStatus(index, newStatus) {
+function updateStatus(index, newStatus) {
         tasks[index].status = newStatus;
         displayTasks();
 	updateDashboard();
-    }
+}
 
-    function resetTasks() {
+function resetTasks() {
         tasks = [];
         targetDate = null;
         document.getElementById('targetDate').value = '';
@@ -155,12 +155,12 @@
         updateDashboard();
     }
 
-    // Function to sort tasks by due date
-    function sortTasksByDueDate() {
+// Function to sort tasks by due date
+function sortTasksByDueDate() {
         tasks.sort((a, b) => a.dueDate - b.dueDate);
-    }
+}
 
-    function exportToXML() {
+function exportToXML() {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<tasks>\n';
 
     tasks.forEach(task => {
@@ -459,4 +459,21 @@ function exportToCSV() {
         a.setAttribute('download', 'tasks.csv');
         a.click();
         URL.revokeObjectURL(url);
-    }
+}
+ // Function to get and display the current date and time
+ function displayCurrentDateTime() {
+    const now = new Date();
+    
+    // Formatting the date and time
+    const formattedDate = now.toLocaleDateString(); // Localized date (MM/DD/YYYY or similar based on locale)
+    const formattedTime = now.toLocaleTimeString(); // Localized time (HH:MM:SS AM/PM)
+
+    // Display date and time in the div
+    document.getElementById('dateTimeDisplay').textContent = `Current Date: ${formattedDate}, Time: ${formattedTime}`;
+}
+
+// Call the function to display the current date and time when the page loads
+displayCurrentDateTime(); // Call once immediately
+
+// Update the date and time every second (1000 ms)
+setInterval(displayCurrentDateTime, 1000);
