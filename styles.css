@@ -1,4 +1,4 @@
-<styl>
+<style>
         
 /* Basic CSS Reset */
 * {
@@ -20,8 +20,9 @@ h1 {
         /* Styling the table */
 table {
     margin: 0 auto; /* Center the table horizoally */
-   width: 90%;
-    border-collapse: collapse;
+   width: 95%;
+    border-collapse: separate;
+    border-spacing: 0 3px; /* Adds 10px space between rows */
     margin-bottom: 20px;
    }
 
@@ -80,7 +81,7 @@ table {
         }
       
         .task-not-yet-due {
-        color: hsl(44, 98%, 48%);
+        color: hsl(43, 100%, 1%);
     }
       .task-in-progress {
         color: rgb(8, 8, 225);
@@ -99,4 +100,11 @@ table {
     color: white; /* Set task font color to white */
     background-color: #333; /* Optional: dark background to make white text stand out */
 }
+
+#dateTimeDisplay {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+
 </style>
