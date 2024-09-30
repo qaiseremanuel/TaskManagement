@@ -14,7 +14,7 @@
     <h2>Task Management & Tracking System</h2>
     
     <!-- Current Date and Time Display -->
-    <div id="dateTimeDisplay">Loading current date and time...</div>
+    <div id="dateTimeDisplay">Loading current date & time...</div>
 
         <!-- Meeting Forum Name -->
         <h3>
@@ -40,7 +40,6 @@
         <h3>Completed</h3>
         <p id="completedTasks">0</p>
     </div>
-
     <div class="dashboard-item">
         <h3>In Progress</h3>
         <p id="inProgressTasks">0</p>
@@ -56,9 +55,9 @@
 <!-- Task Input Fields -->
 <div class="task-form">
     <input type="text" id="taskName" placeholder="Please enter the task description" style="width: 400px;">
-    <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting Date e.g., -15 or +2">
- 
-    <select id="assignee">
+    <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting Date e.g., -7 or +21">
+    <input type="text" id="taskComments" placeholder="Comments - optional  " style="width: 200px;">
+    <select id="assignee">    
         <option value="" disabled selected>Select Task Assignee</option>
         <option value="Secretary">Secretary</option>
         <option value="Imran">Imran</option>
@@ -67,18 +66,18 @@
         <option value="Haroon">Haroon</option>
         <option value="Usman">Usman</option>
     </select>
-    <button id="addTaskButton" onclick="addTask()">+Add New Task</button>
+    <button id="addTaskButton" onclick="addTask()">+ Add a New Task</button>
 </div>
 
 <!-- Search Box -->
-<label for="searchBox">Search Tasks:</label>
+<label for="searchBox">Search:</label>
 <input type="text" id="searchBox" placeholder="Search by task name, assignee, or status" onkeyup="filterTasks()">
 
 <!-- Filter Buttons -->
 <button onclick="filterTasksByToday()">Show Tasks Due Today</button>
 <button onclick="removeFilter()">Remove Filter</button>
 <br>
-<!-- HTML table and other elements go here -->
+<!-- HTML table and other elements -->
 <!-- Task List Table -->
 <table class="task-list" id="taskList">
     <thead>
@@ -89,6 +88,7 @@
             <th>Due Date</th>
             <th>Days Left</th> <!---Column for Days Left--->
             <th>Status</th>
+            <th>Comments</th>
             <th>Actions</th>
         </tr>
     </thead>
