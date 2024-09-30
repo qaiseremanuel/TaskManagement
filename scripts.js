@@ -2,9 +2,27 @@
     let editingIndex = -1;
     let targetDate = null;
 
-    function setMeetingDate() {
-        const targetDateInput = document.getElementById('targetDate').value;
-        if (targetDateInput) {
+// Function to get and display the current date & time
+function displayCurrentDateTime() {
+    const now = new Date();
+    
+    // Formatting the date and time
+    const formattedDate = now.toLocaleDateString(); // Localized date (MM/DD/YYYY or similar based on locale)
+    const formattedTime = now.toLocaleTimeString(); // Localized time (HH:MM:SS AM/PM)
+
+    // Display date and time in the div
+    document.getElementById('dateTimeDisplay').textContent = `Current Date: ${formattedDate}, Time: ${formattedTime}`;
+}
+
+// Call the function to display the current date and time when the page loads
+displayCurrentDateTime(); // Call once immediately
+
+// Update the date and time every second (1000 ms)
+setInterval(displayCurrentDateTime, 1000);
+
+function setMeetingDate() {
+    const targetDateInput = document.getElementById('targetDate').value;
+    if (targetDateInput) {
             targetDate = new Date(targetDateInput);
 	    alert(`Meeting Date Set: ${targetDate.toDateString()}`);
             tasks.forEach(task => {
@@ -12,37 +30,48 @@
                 dueDate.setDate(targetDate.getDate() + task.daysRelative);
                 task.dueDate = dueDate;
             });
-            sortTasksByDueDate();
+            sortTasksByDueDate(); // call to resort tasks according date
             displayTasks();
         } else {
             alert("Please select a meeting date.");
         }
-    }
+}
 
-    function addTask() {
-        const taskName = document.getElementById('taskName').value.trim();
-        const assignee = document.getElementById('assignee').value;
-        const daysRelative = parseInt(document.getElementById('daysBeforeAfter').value);
+function calculateDaysLeft(dueDate) {
+    const today = new Date();
+    const timeDifference = dueDate - today;
+    const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+    return daysLeft;
+}
+
+// Function to sort tasks by due date
+function sortTasksByDueDate() {
+    tasks.sort((a, b) => a.dueDate - b.dueDate);
+}
+
+function addTask() {
+    const taskName = document.getElementById('taskName').value.trim(); // Task name from input
+    const assignee = document.getElementById('assignee').value; // Task asignee from dropdown
+    const daysRelative = parseInt(document.getElementById('daysBeforeAfter').value);
         if (!targetDate) {
            alert("Please set the meeting date first.");
             return;
         }
-
         if (!taskName || !assignee || isNaN(daysRelative)) {
             alert("Please enter task name, relative days, and ensure the meeting date is set.");
             return;
         }
-
-        const dueDate = new Date(targetDate);
-        dueDate.setDate(targetDate.getDate() + daysRelative);
-
+    const dueDate = new Date(targetDate);
+    dueDate.setDate(targetDate.getDate() + daysRelative);
+    const taskComments = document.getElementById('taskComments').value.trim();
         if (editingIndex === -1) {
             tasks.push({
                 name: taskName,
                 assignee: assignee,
                 daysRelative: daysRelative,
                 dueDate: dueDate,
-                status: 'Not Yet Due'
+                status: 'Not Yet Due',
+                comments: taskComments
             });
 
         } else {
@@ -51,26 +80,57 @@
                 assignee: assignee,
                 daysRelative: daysRelative,
                 dueDate: dueDate,
-                status: tasks[editingIndex].status
+                status: tasks[editingIndex].status,
+                comments: taskComments
             };
-
-            document.getElementById('addTaskButton').textContent = "+ Add Another Task";
+            document.getElementById('addTaskButton').textContent = "+ Add a New Task";
             editingIndex = -1;
         }
-
+        //let actionCell = newRow.insertCell(3);
+       // actionCell.innerHTML = `<button onclick="downloadICS('${taskName}', '${dueDate.toISOString()}')">Download Reminder</button>`;
         resetForm();
         sortTasksByDueDate();
         displayTasks();
+	    updateDashboard();
+        
+}
+
+//rest Form
+function resetForm() {
+    document.getElementById('taskName').value = '';
+    document.getElementById('daysBeforeAfter').value = '';
+    document.getElementById('assignee').selectedIndex = 0;
+}
+
+function editTask(index) {
+    const task = tasks[index];
+        document.getElementById('taskName').value = task.name;
+        document.getElementById('daysBeforeAfter').value = task.daysRelative;
+        document.getElementById('assignee').value = task.assignee;
+        document.getElementById('taskComments').value = task.comments;
+
+        document.getElementById('addTaskButton').textContent = "Update Task";
+        editingIndex = index;
 	updateDashboard();
-    }
+}
 
-    function resetForm() {
-        document.getElementById('taskName').value = '';
-        document.getElementById('daysBeforeAfter').value = '';
-        document.getElementById('assignee').selectedIndex = 0;
+function deleteTask(index) { 
+    // Show confirmation before deleting
+    const confirmDelete = confirm("Are you sure you want to delete this task?");
+    if (confirmDelete) {
+        tasks.splice(index, 1);
+        displayTasks();
+	    updateDashboard();
     }
+}
 
-    function displayTasks(query = '', filterByToday = false) {
+function updateStatus(index, newStatus) {
+    tasks[index].status = newStatus;
+    displayTasks();
+	updateDashboard();
+}
+
+/*function displayTasks(query = '', filterByToday = false) {
     const taskBody = document.getElementById('taskBody');
     taskBody.innerHTML = '';
 
@@ -124,119 +184,8 @@
         }
     });
 }
-
-function editTask(index) {
-        const task = tasks[index];
-        document.getElementById('taskName').value = task.name;
-        document.getElementById('daysBeforeAfter').value = task.daysRelative;
-        document.getElementById('assignee').value = task.assignee;
-        document.getElementById('addTaskButton').textContent = "Update Task";
-        editingIndex = index;
-	updateDashboard();
-}
-
-function deleteTask(index) {
-        tasks.splice(index, 1);
-        displayTasks();
-	updateDashboard();
-}
-
-function updateStatus(index, newStatus) {
-        tasks[index].status = newStatus;
-        displayTasks();
-	updateDashboard();
-}
-
-function resetTasks() {
-        tasks = [];
-        targetDate = null;
-        document.getElementById('targetDate').value = '';
-        displayTasks();
-        updateDashboard();
-    }
-
-// Function to sort tasks by due date
-function sortTasksByDueDate() {
-        tasks.sort((a, b) => a.dueDate - b.dueDate);
-}
-
-function exportToXML() {
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<tasks>\n';
-
-    tasks.forEach(task => {
-        const daysLeft = calculateDaysLeft(new Date(task.dueDate)); // Calculate days left
-        
-        xml += `  <task>\n`;
-        xml += `    <name>${task.name}</name>\n`;
-        xml += `    <assignee>${task.assignee}</assignee>\n`;
-        xml += `    <relativeDays>${task.daysRelative}</relativeDays>\n`;
-        xml += `    <dueDate>${task.dueDate.toISOString()}</dueDate>\n`;
-        xml += `    <daysLeft>${daysLeft}</daysLeft>\n`;  // Add Days Left field
-        xml += `    <status>${task.status}</status>\n`;
-        xml += `  </task>\n`;
-    });
-
-    xml += '</tasks>';
-
-    const blob = new Blob([xml], { type: 'application/xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tasks.xml';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-function uploadFromXML(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const xmlData = e.target.result;
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlData, "application/xml");
-
-        const taskElements = xmlDoc.getElementsByTagName('task');
-        
-        tasks = []; // Clear the current tasks array before importing
-
-        for (let i = 0; i < taskElements.length; i++) {
-            const taskElement = taskElements[i];
-            const name = taskElement.getElementsByTagName('name')[0].textContent;
-            const assignee = taskElement.getElementsByTagName('assignee')[0].textContent;
-            const daysRelative = parseInt(taskElement.getElementsByTagName('relativeDays')[0].textContent);
-            const dueDate = new Date(taskElement.getElementsByTagName('dueDate')[0].textContent);
-            const status = taskElement.getElementsByTagName('status')[0].textContent;
-
-            tasks.push({ name, assignee, daysRelative, dueDate, status });
-        }
-
-        displayTasks(); // Refresh the displayed tasks
-	updateDashboard();
-    };
-
-    reader.readAsText(file);
-}
-
-function calculateDaysLeft(dueDate) {
-    const today = new Date();
-    const timeDifference = dueDate - today;
-    const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-    return daysLeft;
-}
-
-function deleteTask(index) { 
-    // Show confirmation before deleting
-    const confirmDelete = confirm("Are you sure you want to delete this task?");
-    if (confirmDelete) {
-        tasks.splice(index, 1);
-        displayTasks();
-	updateDashboard();
-    }
-}
-
-function displayTasks() {
+*/
+/*function displayTasks() {
     const taskBody = document.getElementById('taskBody');
     taskBody.innerHTML = '';
 
@@ -270,7 +219,7 @@ function displayTasks() {
                         <option value="Overdue" ${task.status === 'Overdue' ? 'selected' : ''}>Overdue</option>
                     </select>
                 </td>
-                <td class="action-buttons">
+                 <td class="action-buttons">
                     <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
                     <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
                 </td>
@@ -279,13 +228,13 @@ function displayTasks() {
     });
 	updateDashboard();
 }
-
+*/
 function filterTasks() {
     const query = document.getElementById('searchBox').value.toLowerCase();
     displayTasks(query); // Pass the query to the displayTasks function
 }
 
-function displayTasks(query = '') {
+/*function displayTasks(query = '') {
     const taskBody = document.getElementById('taskBody');
     taskBody.innerHTML = '';
 
@@ -327,17 +276,19 @@ function displayTasks(query = '') {
                             <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
                             <option value="Overdue" ${task.status === 'Overdue' ? 'selected' : ''}>Overdue</option>
                         </select>
+                       <td style="text-align: center;">${task.comments}</td>  
                     </td>
                     <td class="action-buttons">
                         <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
                         <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
+                        <button onclick="downloadICS(${index})">&#128000;</button> <!-- Calendar -->
                     </td>
                 </tr>
              `;
         }
     });
 }
-
+*/
 // Function to filter tasks due today
 function filterTasksByToday() {
     const today = new Date();
@@ -391,7 +342,7 @@ function displayTasks(query = '', filterByToday = false) {
         ) {
             taskBody.innerHTML += `
                 <tr class="${taskClass}">
-                    <td>${task.name}</td>
+                    <td style="text-align: left;">${task.name}</td>
                     <td style="text-align: center;">${task.assignee}</td>
                     <td style="text-align: center;">${task.daysRelative}</td>
                     <td style="text-align: center;">${task.dueDate.toDateString()}</td>
@@ -403,15 +354,18 @@ function displayTasks(query = '', filterByToday = false) {
                             <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
                             <option value="Overdue" ${task.status === 'Overdue' ? 'selected' : ''}>Overdue</option>
                         </select>
+                        <td style="text-align: left;">${task.comments}</>
                     </td>
                     <td class="action-buttons">
                         <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
                         <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
+                        <button onclick="downloadICS(${index})">&#x1F5D3;</button> <!-- Calendar New -->
                     </td>
                 </tr>
             `;
         }
     });
+    updateDashboard()
 }
 
 function updateDashboard() {
@@ -436,6 +390,7 @@ function updateDashboard() {
     document.getElementById('inProgressTasks').textContent = inProgressTasks;
 }
 
+// Import & Export Functions
 function exportToCSV() {
         const csvRows = [];
         csvRows.push(['Activity', 'Assignee', 'Relative Days', 'Due Date', 'Status', 'Comments']);
@@ -460,20 +415,112 @@ function exportToCSV() {
         a.click();
         URL.revokeObjectURL(url);
 }
- // Function to get and display the current date and time
- function displayCurrentDateTime() {
-    const now = new Date();
-    
-    // Formatting the date and time
-    const formattedDate = now.toLocaleDateString(); // Localized date (MM/DD/YYYY or similar based on locale)
-    const formattedTime = now.toLocaleTimeString(); // Localized time (HH:MM:SS AM/PM)
 
-    // Display date and time in the div
-    document.getElementById('dateTimeDisplay').textContent = `Current Date: ${formattedDate}, Time: ${formattedTime}`;
+function exportToXML() {
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<tasks>\n';
+
+    tasks.forEach(task => {
+        const daysLeft = calculateDaysLeft(new Date(task.dueDate)); // Calculate days left
+        
+        xml += `  <task>\n`;
+        xml += `    <name>${task.name}</name>\n`;
+        xml += `    <assignee>${task.assignee}</assignee>\n`;
+        xml += `    <relativeDays>${task.daysRelative}</relativeDays>\n`;
+        xml += `    <dueDate>${task.dueDate.toISOString()}</dueDate>\n`;
+        xml += `    <daysLeft>${daysLeft}</daysLeft>\n`;  // Add Days Left field
+        xml += `    <status>${task.status}</status>\n`;
+        xml += `    <status>${task.comments}</status>\n`;
+        xml += `  </task>\n`;
+    });
+
+    xml += '</tasks>';
+
+    const blob = new Blob([xml], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tasks.xml';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
-// Call the function to display the current date and time when the page loads
-displayCurrentDateTime(); // Call once immediately
+function uploadFromXML(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-// Update the date and time every second (1000 ms)
-setInterval(displayCurrentDateTime, 1000);
+    reader.onload = function(e) {
+        const xmlData = e.target.result;
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlData, "application/xml");
+
+        const taskElements = xmlDoc.getElementsByTagName('task');
+        
+        tasks = []; // Clear the current tasks array before importing
+
+        for (let i = 0; i < taskElements.length; i++) {
+            const taskElement = taskElements[i];
+            const name = taskElement.getElementsByTagName('name')[0].textContent;
+            const assignee = taskElement.getElementsByTagName('assignee')[0].textContent;
+            const daysRelative = parseInt(taskElement.getElementsByTagName('relativeDays')[0].textContent);
+            const dueDate = new Date(taskElement.getElementsByTagName('dueDate')[0].textContent);
+            const status = taskElement.getElementsByTagName('status')[0].textContent;
+
+            tasks.push({ name, assignee, daysRelative, dueDate, status, comments });
+        }
+
+        displayTasks(); // Refresh the displayed tasks
+	    updateDashboard();
+    };
+    reader.readAsText(file);
+}
+
+function downloadICS(taskName, dueDateISO) {
+    let dueDate = new Date(dueDateISO); // Parse the due date
+
+    // Create the ICS file content (Reminder event)
+    let icsContent = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Company//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:${new Date().getTime()}@yourdomain.com
+DTSTAMP:${formatDate(new Date())}
+DTSTART:${formatDate(dueDate)}
+SUMMARY:${taskName}
+DESCRIPTION:${taskName} is due on ${dueDate.toDateString()}
+END:VEVENT
+END:VCALENDAR`;
+
+    // Create Blob for ICS file content
+    let blob = new Blob([icsContent], { type: 'text/calendar' });
+    let url = URL.createObjectURL(blob); // Create URL for download
+
+    // Create a temporary <a> element to download the file
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = taskName.replace(/\s+/g, '_') + '.ics'; // ICS file name
+    a.click(); // Trigger the download
+    URL.revokeObjectURL(url); // Clean up URL
+}
+
+// Helper function to format the date in YYYYMMDDThhmmssZ format for ICS
+function formatDate(date) {
+    let year = date.getUTCFullYear();
+    let month = ('0' + (date.getUTCMonth() + 1)).slice(-2);
+    let day = ('0' + date.getUTCDate()).slice(-2);
+    let hours = ('0' + date.getUTCHours()).slice(-2);
+    let minutes = ('0' + date.getUTCMinutes()).slice(-2);
+    let seconds = ('0' + date.getUTCSeconds()).slice(-2);
+
+    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+}
+
+// Reset All
+function resetTasks() {
+    tasks = [];
+    targetDate = null;
+    document.getElementById('targetDate').value = '';
+    displayTasks();
+    updateDashboard();
+}
