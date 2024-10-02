@@ -22,19 +22,27 @@ setInterval(displayCurrentDateTime, 1000);
 
 function setMeetingDate() {
     const targetDateInput = document.getElementById('targetDate').value;
+    const setDateButton = document.getElementById('setDateButton'); // Button to change caption
+    
     if (targetDateInput) {
-            targetDate = new Date(targetDateInput);
-	    alert(`Meeting Date Set: ${targetDate.toDateString()}`);
-            tasks.forEach(task => {
-                const dueDate = new Date(targetDate);
-                dueDate.setDate(targetDate.getDate() + task.daysRelative);
-                task.dueDate = dueDate;
-            });
-            sortTasksByDueDate(); // call to resort tasks according date
-            displayTasks();
-        } else {
-            alert("Please select a meeting date.");
-        }
+        targetDate = new Date(targetDateInput);
+
+        // Change button caption to show the selected meeting date
+        setDateButton.textContent = `Meeting Date Set: ${targetDate.toDateString()}`;
+
+        // Update all tasks' due dates based on the new meeting date
+        tasks.forEach(task => {
+            const dueDate = new Date(targetDate);
+            dueDate.setDate(targetDate.getDate() + task.daysRelative);
+            task.dueDate = dueDate;
+        });
+        
+        sortTasksByDueDate();
+        displayTasks();
+    } else {
+        // If no date is selected, ask the user to select a date
+        setDateButton.textContent = "Please select a meeting date!";
+    }
 }
 
 function calculateDaysLeft(dueDate) {
@@ -81,18 +89,15 @@ function addTask() {
                 daysRelative: daysRelative,
                 dueDate: dueDate,
                 status: tasks[editingIndex].status,
-                comments: taskComments
+                comments: taskComments,
             };
-            document.getElementById('addTaskButton').textContent = "+ Add a New Task";
+            document.getElementById('addTaskButton').textContent = "+ Add Task";
             editingIndex = -1;
         }
-        //let actionCell = newRow.insertCell(3);
-       // actionCell.innerHTML = `<button onclick="downloadICS('${taskName}', '${dueDate.toISOString()}')">Download Reminder</button>`;
-        resetForm();
-        sortTasksByDueDate();
-        displayTasks();
-	    updateDashboard();
-        
+    resetForm();
+    sortTasksByDueDate();
+    displayTasks();
+	updateDashboard();     
 }
 
 //rest Form
@@ -100,6 +105,7 @@ function resetForm() {
     document.getElementById('taskName').value = '';
     document.getElementById('daysBeforeAfter').value = '';
     document.getElementById('assignee').selectedIndex = 0;
+    document.getElementById('taskComments').value = '';
 }
 
 function editTask(index) {
@@ -130,165 +136,11 @@ function updateStatus(index, newStatus) {
 	updateDashboard();
 }
 
-/*function displayTasks(query = '', filterByToday = false) {
-    const taskBody = document.getElementById('taskBody');
-    taskBody.innerHTML = '';
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Ensure the time is set to midnight for comparison
-
-    tasks.forEach((task, index) => {
-        const daysLeft = calculateDaysLeft(task.dueDate);
-
-        // Convert task properties to lowercase for case-insensitive comparison
-        const taskNameLower = task.name.toLowerCase();
-        const assigneeLower = task.assignee.toLowerCase();
-        const statusLower = task.status.toLowerCase();
-
-        // Check if the task matches the search query or filter by today
-        const dueDate = new Date(task.dueDate);
-        dueDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
-
-        if (
-            (taskNameLower.includes(query) ||
-            assigneeLower.includes(query) ||
-            statusLower.includes(query)) &&
-            (!filterByToday || dueDate.getTime() === today.getTime()) // Check if the task is due today if filter is applied
-        ) {
-            taskBody.innerHTML += `
-                <tr>
-                    <td>${task.name}</td>
-                    <td style="text-align: center;">${task.assignee}</td>
-                    <td style="text-align: center;">${task.daysRelative}</td>
-                    <td style="text-align: center;">
-                        ${task.dueDate.toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}
-                    </td>
-                    <td style="text-align: center;">${daysLeft}</td>
-                    <td style="text-align: center;">
-                        <select onchange="updateStatus(${index}, this.value)">
-                            <option value="Not Yet Due" ${task.status === 'Not Yet Due' ? 'selected' : ''}>Not Yet Due</option>
-                            <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                            <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                        </select>
-                    </td>
-                    <td class="action-buttons">
-                        <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
-                        <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
-                    </td>
-                </tr>
-`;
-        }
-    });
-}
-*/
-/*function displayTasks() {
-    const taskBody = document.getElementById('taskBody');
-    taskBody.innerHTML = '';
-
-    tasks.forEach((task, index) => {
-        const daysLeft = calculateDaysLeft(task.dueDate);
-        
-        // Determine the class based on the task status
-        let taskClass = '';
-        if (task.status === 'Not Yet Due') {
-            taskClass = 'task-not-yet-due';
-        } else if (task.status === 'In Progress') {
-            taskClass = 'task-in-progress';
-        } else if (task.status === 'Completed') {
-            taskClass = 'task-completed';
-        } else if (task.status === 'Overdue') {
-            taskClass = 'task-overdue';
-        }
-
-        taskBody.innerHTML += `
-            <tr class="${taskClass}">
-                <td>${task.name}</td>
-                <td style="text-align: center;">${task.assignee}</td>
-                <td style="text-align: center;">${task.daysRelative}</td>
-                <td style="text-align: center;">${task.dueDate.toDateString()}</td>
-                <td style="text-align: center;">${daysLeft}</td>
-                <td style="text-align: center;">
-                    <select onchange="updateStatus(${index}, this.value)">
-                        <option value="Not Yet Due" ${task.status === 'Not Yet Due' ? 'selected' : ''}>Not Yet Due</option>
-                        <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                        <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                        <option value="Overdue" ${task.status === 'Overdue' ? 'selected' : ''}>Overdue</option>
-                    </select>
-                </td>
-                 <td class="action-buttons">
-                    <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
-                    <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
-                </td>
-            </tr>
-        `;
-    });
-	updateDashboard();
-}
-*/
 function filterTasks() {
     const query = document.getElementById('searchBox').value.toLowerCase();
     displayTasks(query); // Pass the query to the displayTasks function
 }
 
-/*function displayTasks(query = '') {
-    const taskBody = document.getElementById('taskBody');
-    taskBody.innerHTML = '';
-
-    tasks.forEach((task, index) => {
-        const daysLeft = calculateDaysLeft(task.dueDate);
-
-        // Determine the class based on the task status
-        let taskClass = '';
-        if (task.status === 'Not Yet Due') {
-            taskClass = 'task-not-yet-due';
-        } else if (task.status === 'In Progress') {
-            taskClass = 'task-in-progress';
-        } else if (task.status === 'Completed') {
-            taskClass = 'task-completed';
-        }
-
-        // Convert task properties to lowercase for case-insensitive comparison
-        const taskNameLower = task.name.toLowerCase();
-        const assigneeLower = task.assignee.toLowerCase();
-        const statusLower = task.status.toLowerCase();
-
-        // Check if the task matches the search query
-        if (
-            taskNameLower.includes(query) ||
-            assigneeLower.includes(query) ||
-            statusLower.includes(query)
-        ) {
-            taskBody.innerHTML += `
-                <tr class="${taskClass}">
-                    <td>${task.name}</td>
-                    <td style="text-align: center;">${task.assignee}</td>
-                    <td style="text-align: center;">${task.daysRelative}</td>
-                    <td style="text-align: center;">${task.dueDate.toDateString()}</td>
-                    <td style="text-align: center;">${daysLeft}</td>
-                    <td style="text-align: center;">
-                        <select onchange="updateStatus(${index}, this.value)">
-                            <option value="Not Yet Due" ${task.status === 'Not Yet Due' ? 'selected' : ''}>Not Yet Due</option>
-                            <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                            <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                            <option value="Overdue" ${task.status === 'Overdue' ? 'selected' : ''}>Overdue</option>
-                        </select>
-                       <td style="text-align: center;">${task.comments}</td>  
-                    </td>
-                    <td class="action-buttons">
-                        <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
-                        <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
-                        <button onclick="downloadICS(${index})">&#128000;</button> <!-- Calendar -->
-                    </td>
-                </tr>
-             `;
-        }
-    });
-}
-*/
 // Function to filter tasks due today
 function filterTasksByToday() {
     const today = new Date();
@@ -357,9 +209,19 @@ function displayTasks(query = '', filterByToday = false) {
                         <td style="text-align: left;">${task.comments}</>
                     </td>
                     <td class="action-buttons">
-                        <button onclick="editTask(${index})">&#9998;</button> <!-- Pen Icon -->
-                        <button onclick="deleteTask(${index})">&#128465;</button> <!-- Trash Bin Icon -->
-                        <button onclick="downloadICS(${index})">&#x1F5D3;</button> <!-- Calendar New -->
+                        <!-- Edit button with tooltip -->
+                        <button title="Edit Task" onclick="editTask(${index})">
+                        <i class="fa fa-pencil"></i> <!-- Font Awesome edit icon -->
+                        </button>
+
+                        <!-- Delete button with tooltip -->
+                        <button title="Delete Task" onclick="deleteTask(${index})">
+                        <i class="fa fa-trash"></i> <!-- Font Awesome delete icon -->
+                        </button>
+                        
+                        <button title="Download Reminder" onclick="downloadICS('${task.name}', '${task.dueDate}')">
+                        <i class="fas fa-calendar-alt"></i>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -429,7 +291,7 @@ function exportToXML() {
         xml += `    <dueDate>${task.dueDate.toISOString()}</dueDate>\n`;
         xml += `    <daysLeft>${daysLeft}</daysLeft>\n`;  // Add Days Left field
         xml += `    <status>${task.status}</status>\n`;
-        xml += `    <status>${task.comments}</status>\n`;
+        xml += `    <Comments>${task.comments}</Comments>\n`;
         xml += `  </task>\n`;
     });
 
@@ -465,7 +327,7 @@ function uploadFromXML(event) {
             const daysRelative = parseInt(taskElement.getElementsByTagName('relativeDays')[0].textContent);
             const dueDate = new Date(taskElement.getElementsByTagName('dueDate')[0].textContent);
             const status = taskElement.getElementsByTagName('status')[0].textContent;
-
+            const comments = taskElement.getElementsByTagName('Comments')[0].textContent;
             tasks.push({ name, assignee, daysRelative, dueDate, status, comments });
         }
 
@@ -475,8 +337,79 @@ function uploadFromXML(event) {
     reader.readAsText(file);
 }
 
+
+// Function to download the task table as PDF
+function saveTableAsPDF() {
+    // Create a new jsPDF instance
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Get the table element and its rows (excluding "Actions" column)
+    const taskTable = document.getElementById('taskBody');
+    const tableRows = taskTable.querySelectorAll('tbody tr');
+    
+    // Set PDF title
+    doc.setFontSize(18);
+    doc.text("Task Management Table", 14, 16);
+    
+    // Add a timestamp to the PDF
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 22);
+
+    // Define table headers (excluding the "Actions" column)
+    const headers = ["Task", "Assignee", "Reletive Days", "Days Left", "Due Date", "Status", "Comments" ];
+    let rowHeight = 30;  // Set initial row height for table
+
+    // Draw headers in PDF
+    doc.setFontSize(10);
+    headers.forEach((header, index) => {
+        doc.text(header, 14 + index * 50, rowHeight); // Adjust positioning
+    });
+
+    rowHeight += 10; // Move down for the first row
+
+    // Loop through each row and add data to the PDF
+    tableRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        doc.setFontSize(9);
+
+        // Exclude the "Actions" column (last cell)
+        for (let i = 0; i < cells.length - 1; i++) { // Skip the last cell
+            doc.text(cells[i].innerText, 14 + i * 50, rowHeight);
+        }
+
+        rowHeight += 10; // Move to the next row
+    });
+
+    // Save the PDF with a dynamic file name
+    doc.save(`Task_Table_${new Date().getTime()}.pdf`);
+}
+
+// Helper function to format the date for PDF
+function formatDateForPDF(date) {
+    let year = date.getFullYear();
+    let month = ('0' + (date.getMonth() + 1)).slice(-2);
+    let day = ('0' + date.getDate()).slice(-2);
+    let hours = ('0' + date.getHours()).slice(-2);
+    let minutes = ('0' + date.getMinutes()).slice(-2);
+    let seconds = ('0' + date.getSeconds()).slice(-2);
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 function downloadICS(taskName, dueDateISO) {
     let dueDate = new Date(dueDateISO); // Parse the due date
+
+    if (!targetDate) {
+        alert("Please set the meeting date first.");
+         return;
+     }
+
+    // Check if the task is overdue
+    if (new Date() > dueDate) {
+        alert("This task is overdue!");
+        return;
+    }
 
     // Create the ICS file content (Reminder event)
     let icsContent = 
@@ -499,9 +432,11 @@ END:VCALENDAR`;
     // Create a temporary <a> element to download the file
     let a = document.createElement('a');
     a.href = url;
-    a.download = taskName.replace(/\s+/g, '_') + '.ics'; // ICS file name
+    a.download = taskName.replace(/\s+/g, ' ') + '.ics'; // ICS file name
     a.click(); // Trigger the download
     URL.revokeObjectURL(url); // Clean up URL
+    
+    alert("Reminder Downloaded."); 
 }
 
 // Helper function to format the date in YYYYMMDDThhmmssZ format for ICS
