@@ -49,24 +49,34 @@
 
 <!-- Set Meeting Date -->
 <label for="targetDate">Meeting Date:</label>
+
 <input type="date" id="targetDate">
-<button onclick="setMeetingDate()">Set Meeting Date</button>
+
+<style>
+    #setDateButton {
+        height: 30px;
+    }
+</style>
+
+<button id="setDateButton" onclick="setMeetingDate()">Set Meeting Date</button>
 
 <!-- Task Input Fields -->
 <div class="task-form">
     <input type="text" id="taskName" placeholder="Please enter the task description" style="width: 400px;">
     <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting Date e.g., -7 or +21">
     <input type="text" id="taskComments" placeholder="Comments - optional  " style="width: 200px;">
+    
     <select id="assignee">    
         <option value="" disabled selected>Select Task Assignee</option>
-        <option value="Secretary">Secretary</option>
-        <option value="Imran">Imran</option>
-        <option value="Khalil">Khalil</option>
-        <option value="Haris">Haris</option>
-        <option value="Haroon">Haroon</option>
-        <option value="Usman">Usman</option>
+        <option value="Secretary">Co. Secretary</option>
+        <option value="Sr. Board Coord.">Sr. Board Coord.</option>
+        <option value="Sr. Comm. Coord.">Sr. Comm. Coord.</option>
+        <option value="Board Coord.">Board Coord.</option>
+        <option value="Comm. Coord.">Comm. Coord.</option>
+        <option value="Admin Coord.">Admin Coord.</option>
     </select>
-    <button id="addTaskButton" onclick="addTask()">+ Add a New Task</button>
+    
+    <button id="addTaskButton" onclick="addTask()">+ Add Task</button>
 </div>
 
 <!-- Search Box -->
@@ -98,10 +108,19 @@
 <!-- Reset and Import and Export Buttons -->
 <button onclick="resetTasks()">Reset</button>
 <button onclick="exportToCSV()">Export to Excel</button>
+<button onclick="saveTableAsPDF()">Download PDF</button>
 <button onclick="exportToXML()">Export to XML</button>
 <input type="file" accept=".xml" onchange="uploadFromXML(event)">
 
-    <!-- Link to external JavaScript -->
-    <script src="scripts.js"></script>
+<!-- Link to external JavaScript -->
+
+<!-- Font Awesome CSS link -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></script>
+<script src="scripts.js"></script>
+<!-- Include jsPDF from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<h5>Corporate Affairs Group</h5>
+<h6>V 2.8 </h6>
 </body>
 </html>
