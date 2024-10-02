@@ -1,5 +1,5 @@
 <style>
-   
+  
 /* Basic CSS Reset */
 * {
     margin: 0;
@@ -51,12 +51,11 @@ table {
         }
         
         .task-form {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             display: flex;
             justify-content: space-between;
         }
-       
         .task-form input, .task-form button {
             padding: 10px;
             margin: 5px;
@@ -69,7 +68,7 @@ table {
             color: white;
         }
         .dashboard-item {
-            background-color: hsl(240, 1%, 41%);
+            background-color: rgb(137, 137, 140);
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
@@ -97,7 +96,7 @@ table {
         color: red;
         }
 
-/* Change font color to white for all task counters */
+/* Font color for all task counters */
 .task-item {
     color: white; /* Set task font color to white */
     background-color: #333; /* Optional: dark background to make white text stand out */
@@ -108,5 +107,12 @@ table {
     font-weight: bold;
     margin-bottom: 20px;
     text-align: center;
+}
+
+#setDateButton {
+    height: 10px;
+    padding: 10px 10px; 
+    font-size: 15px; 
+    width: 280px;
 }
 </style>
