@@ -252,8 +252,27 @@ function updateDashboard() {
     document.getElementById('inProgressTasks').textContent = inProgressTasks;
 }
 
-// Import & Export Functions
-function exportToCSV() {
+// Function to handle the download action
+function downloadFile() {
+    const fileFormat = document.getElementById("fileFormat").value;
+
+    switch (fileFormat) {
+        case "pdf":
+            ExportToPDF();
+            break;
+        case "csv":
+            ExportToCSV();
+            break;
+        case "xml":
+            exportToXML();
+            break;
+        default:
+            alert("Please select a valid format.");
+    }
+}
+
+// Export & Import Functions
+function ExportToCSV() {
         const csvRows = [];
         csvRows.push(['Activity', 'Assignee', 'Relative Days', 'Due Date', 'Status', 'Comments']);
 
@@ -337,19 +356,21 @@ function uploadFromXML(event) {
     reader.readAsText(file);
 }
 
-
 // Function to download the task table as PDF
-function saveTableAsPDF() {
+function ExportToPDF() {
     // Create a new jsPDF instance
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF({
+        orientation: "landscape",
+        format: 'a4',
+    });
 
     // Get the table element and its rows (excluding "Actions" column)
     const taskTable = document.getElementById('taskBody');
     const tableRows = taskTable.querySelectorAll('tbody tr');
     
     // Set PDF title
-    doc.setFontSize(18);
+    doc.setFontSize(12);
     doc.text("Task Management Table", 14, 16);
     
     // Add a timestamp to the PDF
@@ -357,7 +378,7 @@ function saveTableAsPDF() {
     doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 22);
 
     // Define table headers (excluding the "Actions" column)
-    const headers = ["Task", "Assignee", "Reletive Days", "Days Left", "Due Date", "Status", "Comments" ];
+    const headers = ["Task", "Assignee", "Reletive Days", "Due Date", "Days Left", "Status", "Comments" ];
     let rowHeight = 30;  // Set initial row height for table
 
     // Draw headers in PDF
@@ -435,8 +456,6 @@ END:VCALENDAR`;
     a.download = taskName.replace(/\s+/g, ' ') + '.ics'; // ICS file name
     a.click(); // Trigger the download
     URL.revokeObjectURL(url); // Clean up URL
-    
-    alert("Reminder Downloaded."); 
 }
 
 // Helper function to format the date in YYYYMMDDThhmmssZ format for ICS
@@ -456,6 +475,7 @@ function resetTasks() {
     tasks = [];
     targetDate = null;
     document.getElementById('targetDate').value = '';
+    document.getElementById('forumName').value = '';
     displayTasks();
     updateDashboard();
 }
