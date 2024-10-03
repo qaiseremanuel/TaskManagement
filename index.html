@@ -16,12 +16,6 @@
     <!-- Current Date and Time Display -->
     <div id="dateTimeDisplay">Loading current date & time...</div>
 
-        <!-- Meeting Forum Name -->
-        <h3>
-            <label for="eventName">Forum:</label>
-            <input type="text" id="eventName" placeholder="Enter event name, e.g., Board Meeting">
-        </h3>
-
 <!-- Dashboard View -->
 <div class="dashboard" id="dashboard">
     <div class="dashboard-item">
@@ -45,19 +39,16 @@
         <p id="inProgressTasks">0</p>
     </div>
 </div>
-<br>
+
+<!-- Meeting Forum Name -->
+<h3>
+    <!--<label for="forumtName">Forum:</label> -->
+    <input type="text" id="forumName" placeholder="Forum name, e.g., Board of Director">
+</h3>
 
 <!-- Set Meeting Date -->
 <label for="targetDate">Meeting Date:</label>
-
 <input type="date" id="targetDate">
-
-<style>
-    #setDateButton {
-        height: 30px;
-    }
-</style>
-
 <button id="setDateButton" onclick="setMeetingDate()">Set Meeting Date</button>
 
 <!-- Task Input Fields -->
@@ -68,12 +59,12 @@
     
     <select id="assignee">    
         <option value="" disabled selected>Select Task Assignee</option>
-        <option value="Secretary">Co. Secretary</option>
-        <option value="Sr. Board Coord.">Sr. Board Coord.</option>
-        <option value="Sr. Comm. Coord.">Sr. Comm. Coord.</option>
+        <option value="Co. Secretary">Co. Secretary</option>
+        <option value="Board Coord. Sr.">Board Coord. Sr.</option>
+        <option value="Comm. Coord. Sr.">Comm. Coord. Sr.</option>
         <option value="Board Coord.">Board Coord.</option>
         <option value="Comm. Coord.">Comm. Coord.</option>
-        <option value="Admin Coord.">Admin Coord.</option>
+        <option value="Planning Coord.">Planning Coord.</option>
     </select>
     
     <button id="addTaskButton" onclick="addTask()">+ Add Task</button>
@@ -106,10 +97,20 @@
 </table>
 
 <!-- Reset and Import and Export Buttons -->
+
 <button onclick="resetTasks()">Reset</button>
-<button onclick="exportToCSV()">Export to Excel</button>
-<button onclick="saveTableAsPDF()">Download PDF</button>
-<button onclick="exportToXML()">Export to XML</button>
+
+<!-- Dropdown list to select file format -->
+<label for="fileFormat">Select Format to Download:</label>
+<select id="fileFormat">
+  <option value="pdf">PDF</option>
+  <option value="csv">CSV</option>
+  <option value="xml">XML</option>
+</select>
+
+<!-- Go button -->
+
+<button onclick="downloadFile()">Go</button>
 <input type="file" accept=".xml" onchange="uploadFromXML(event)">
 
 <!-- Link to external JavaScript -->
@@ -121,6 +122,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <h5>Corporate Affairs Group</h5>
-<h6>V 2.8 </h6>
+
 </body>
 </html>
