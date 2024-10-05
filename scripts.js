@@ -108,6 +108,8 @@ function resetForm() {
     document.getElementById('taskComments').value = '';
 }
 
+// Action Buttons Edit, Delete and Download Reminder
+
 function editTask(index) {
     const task = tasks[index];
         document.getElementById('taskName').value = task.name;
@@ -134,6 +136,59 @@ function updateStatus(index, newStatus) {
     tasks[index].status = newStatus;
     displayTasks();
 	updateDashboard();
+}
+
+function downloadICS(taskName, dueDateISO) {
+    let dueDate = new Date(dueDateISO); // Parse the due date
+
+    if (!targetDate) {
+        alert("Please set the meeting date first.");
+         return;
+     }
+
+    // Check if the task is overdue
+    if (new Date() > dueDate) {
+        alert("This task is overdue!");
+        return;
+    }
+
+    // Create the ICS file content (Reminder event)
+    let icsContent = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Company//NONSGML v1.0//EN
+BEGIN:VTODO
+UID:${new Date().getTime()}@yourdomain.com
+DTSTAMP:${formatDate(new Date())}
+DUE:${formatDate(dueDate)}
+SUMMARY:${taskName}
+DESCRIPTION:${taskName} is due on ${dueDate.toDateString()}
+STATUS:NEEDS-ACTION
+END:VTODO
+END:VCALENDAR`;
+
+    // Create Blob for ICS file content
+    let blob = new Blob([icsContent], { type: 'text/calendar' });
+    let url = URL.createObjectURL(blob); // Create URL for download
+
+    // Create a temporary <a> element to download the file
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = taskName.replace(/\s+/g, '_') + '.ics'; // ICS file name
+    a.click(); // Trigger the download
+    URL.revokeObjectURL(url); // Clean up URL
+}
+
+// Helper function to format the date in YYYYMMDDThhmmssZ format for ICS
+function formatDate(date) {
+    let year = date.getUTCFullYear();
+    let month = ('0' + (date.getUTCMonth() + 1)).slice(-2);
+    let day = ('0' + date.getUTCDate()).slice(-2);
+    let hours = ('0' + date.getUTCHours()).slice(-2);
+    let minutes = ('0' + date.getUTCMinutes()).slice(-2);
+    let seconds = ('0' + date.getUTCSeconds()).slice(-2);
+
+    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
 }
 
 function filterTasks() {
@@ -416,58 +471,6 @@ function formatDateForPDF(date) {
     let seconds = ('0' + date.getSeconds()).slice(-2);
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
-function downloadICS(taskName, dueDateISO) {
-    let dueDate = new Date(dueDateISO); // Parse the due date
-
-    if (!targetDate) {
-        alert("Please set the meeting date first.");
-         return;
-     }
-
-    // Check if the task is overdue
-    if (new Date() > dueDate) {
-        alert("This task is overdue!");
-        return;
-    }
-
-    // Create the ICS file content (Reminder event)
-    let icsContent = 
-`BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Your Company//NONSGML v1.0//EN
-BEGIN:VEVENT
-UID:${new Date().getTime()}@yourdomain.com
-DTSTAMP:${formatDate(new Date())}
-DTSTART:${formatDate(dueDate)}
-SUMMARY:${taskName}
-DESCRIPTION:${taskName} is due on ${dueDate.toDateString()}
-END:VEVENT
-END:VCALENDAR`;
-
-    // Create Blob for ICS file content
-    let blob = new Blob([icsContent], { type: 'text/calendar' });
-    let url = URL.createObjectURL(blob); // Create URL for download
-
-    // Create a temporary <a> element to download the file
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = taskName.replace(/\s+/g, ' ') + '.ics'; // ICS file name
-    a.click(); // Trigger the download
-    URL.revokeObjectURL(url); // Clean up URL
-}
-
-// Helper function to format the date in YYYYMMDDThhmmssZ format for ICS
-function formatDate(date) {
-    let year = date.getUTCFullYear();
-    let month = ('0' + (date.getUTCMonth() + 1)).slice(-2);
-    let day = ('0' + date.getUTCDate()).slice(-2);
-    let hours = ('0' + date.getUTCHours()).slice(-2);
-    let minutes = ('0' + date.getUTCMinutes()).slice(-2);
-    let seconds = ('0' + date.getUTCSeconds()).slice(-2);
-
-    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
 }
 
 // Reset All
