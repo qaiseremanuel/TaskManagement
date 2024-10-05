@@ -24,7 +24,17 @@ table {
     border-collapse: separate;
     border-spacing: 0 3px; /* Adds 3px space between rows */
     margin-bottom: 20px;
-   }
+
+tr:nth-child(odd) {
+    background-color: #f0f0f0;
+    }
+    tr:nth-child(even) {
+        background-color: #d0e8f2; /* Light Gray for even rows */
+    }
+    tr:hover {
+        background-color: #dadbee;
+    }
+}
 
  th, td {
             border: 1px solid #ccc;
@@ -133,5 +143,4 @@ table {
         font-size: 14px;
         text-align: left;
      }
-
 </style>
