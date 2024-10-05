@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1>MCB Bank Limited</h1>
+<!-- <h1>MCB Bank Limited</h1>-->
     <h2>Task Management & Tracking System</h2>
     
     <!-- Current Date and Time Display -->
@@ -98,26 +98,29 @@
 
 <!-- Reset and Import and Export Buttons -->
 
-<button onclick="resetTasks()">Reset</button>
-
 <!-- Dropdown list to select file format -->
 <label for="fileFormat">Select Format to Download:</label>
 <select id="fileFormat">
-  <option value="pdf">PDF</option>
-  <option value="csv">CSV</option>
-  <option value="xml">XML</option>
+    <option value="xml">XML</option>
+    <option value="csv">CSV</option>
+    <option value="pdf">PDF</option>
 </select>
 
 <!-- Go button -->
-
 <button onclick="downloadFile()">Go</button>
+
+<!-- Reset Button -->
+<button onclick="resetTasks()">Reset All</button>
+
+<!-- Input from XML -->
 <input type="file" accept=".xml" onchange="uploadFromXML(event)">
 
+<script src="scripts.js"></script>
 <!-- Link to external JavaScript -->
 
 <!-- Font Awesome CSS link -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></script>
-<script src="scripts.js"></script>
+
 <!-- Include jsPDF from CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
