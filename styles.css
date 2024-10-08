@@ -12,9 +12,9 @@ body {
 }
 /* Title styling */
 h1 {
-    font-size: 36px; /* Increase the title font size */
+    font-size: 36px; /* Title font size */
     text-align: center; /* Center-align the title */
-    color:#18691b; /* Optional: Change title color */
+    color:#18691b; /* Title color */
 }
 
 /* Styling the table */
@@ -22,17 +22,17 @@ table {
     margin: 0 auto; /* Center the table horizoally */
     width: 95%;
     border-collapse: separate;
-    border-spacing: 0 3px; /* Adds 3px space between rows */
+    border-spacing:0 7px; /* No spacing b/w columns and 7px space b/w rows */
     margin-bottom: 20px;
 
 tr:nth-child(odd) {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; /* white*/
     }
     tr:nth-child(even) {
-        background-color: #d0e8f2; /* Light Gray for even rows */
+        background-color: hwb(0 70% 30%); /* Light Gray for even rows */
     }
     tr:hover {
-        background-color: #dadbee;
+        background-color: hwb(127 55% 1%);
     }
 }
 
@@ -130,8 +130,8 @@ tr:nth-child(odd) {
     }
 
     #forumName{
-        height: 20px;
-        width: 300px;
+        height: 30px;
+        width: 450px;
         font-size: 20px;
         text-align: center;
         font-weight: bolder;
