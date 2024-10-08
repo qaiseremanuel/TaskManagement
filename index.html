@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<!-- <h1>MCB Bank Limited</h1>-->
+<!-- <h1>Company Name</h1>-->
     <h2>Task Management & Tracking System</h2>
     
     <!-- Current Date and Time Display -->
@@ -41,36 +41,33 @@
 </div>
 
 <!-- Meeting Forum Name -->
-<h3>
-    <!--<label for="forumtName">Forum:</label> -->
-    <input type="text" id="forumName" placeholder="Forum name, e.g., Board of Director">
-</h3>
+<h3> <input type="text" id="forumName" placeholder="Forum Name e.g. Board of Directors"> </h3>
 
 <!-- Set Meeting Date -->
 <label for="targetDate">Meeting Date:</label>
 <input type="date" id="targetDate">
 <button id="setDateButton" onclick="setMeetingDate()">Set Meeting Date</button>
 
-<!-- Task Input Fields -->
+<!-- Task Input fields -->
 <div class="task-form">
     <input type="text" id="taskName" placeholder="Please enter the task description" style="width: 400px;">
-    <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting Date e.g., -7 or +21">
-    <input type="text" id="taskComments" placeholder="Comments - optional  " style="width: 200px;">
+    <input type="number" id="daysBeforeAfter" placeholder="Days Relative to Meeting">
+    <input type="text" id="taskComments" placeholder="Comments - optional" style="width: 200px;">
     
     <select id="assignee">    
         <option value="" disabled selected>Select Task Assignee</option>
-        <option value="Co. Secretary">Co. Secretary</option>
-        <option value="Board Coord. Sr.">Board Coord. Sr.</option>
-        <option value="Comm. Coord. Sr.">Comm. Coord. Sr.</option>
-        <option value="Board Coord.">Board Coord.</option>
-        <option value="Comm. Coord.">Comm. Coord.</option>
-        <option value="Planning Coord.">Planning Coord.</option>
+        <option value="Company Secretary">Company Secretary</option>
+        <option value="DH. Board Coord.">DH. Board Coord.</option>
+        <option value="UH. Comm. Coord.">UH. Comm. Coord.</option>
+        <option value="Sr. Off. Board Coord.">Sr. Off. Board Coord.</option>
+        <option value="Sr. Off. Comm. Coord.">Sr. Off. Comm. Coord.</option>
+        <option value="Sr. Off. Comp., Plan.">Sr. Off. Comp., Plan.</option>
     </select>
     
     <button id="addTaskButton" onclick="addTask()">+ Add Task</button>
 </div>
 
-<!-- Search Box -->
+<!-- Versatile Search Box -->
 <label for="searchBox">Search:</label>
 <input type="text" id="searchBox" placeholder="Search by task name, assignee, or status" onkeyup="filterTasks()">
 
@@ -79,7 +76,7 @@
 <button onclick="removeFilter()">Remove Filter</button>
 <br>
 <!-- HTML table and other elements -->
-<!-- Task List Table -->
+<!-- Task List Table i.e table Headers -->
 <table class="task-list" id="taskList">
     <thead>
         <tr>
